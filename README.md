@@ -11,6 +11,6 @@ Some implementations of data compression algorithms.
 | :------: | :------:|
 | lz77 | +1.015142 % |
 | huffman | -16.926249 % |
-| deflate | -99.993175 % |
+| deflate | -18.380337 % |
 
 </center>
