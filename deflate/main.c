@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <assert.h>
 #include "zlib/zlib.h"
 
 typedef struct _BIN_FILE {
@@ -59,10 +60,8 @@ int main(int argc, char *argv[]){
     defstream.zfree = Z_NULL;
     defstream.opaque = Z_NULL;
     // setup file->byte as input, and compress_text as output
-    // defstream.avail_in = (uInt)strlen(buf)+1;
     defstream.avail_in = filelen+1;
     defstream.next_in = (Bytef *)buf;
-    // defstream.avail_out = (uInt)sizeof(compress_text);
     defstream.avail_out = filelen+1;
     defstream.next_out = (Bytef *)compress_text;
 
@@ -72,7 +71,7 @@ int main(int argc, char *argv[]){
     deflateEnd(&defstream);
 
     // This is one way of getting the size of the output
-    printf("Compressed size is: %lu bytes\n", strlen((char *)compress_text));
+    printf("Compressed size is: %lu bytes\n", defstream.total_out);
     printf("\n----------\n\n");
 
     /* TODO: output this compressed file */
@@ -94,10 +93,11 @@ int main(int argc, char *argv[]){
     inflate(&infstream, Z_NO_FLUSH);
     inflateEnd(&infstream);
     // This is one way of getting the size of the output
-    printf("Uncompressed size is: %lu bytes\n", strlen((char *)decompress_text));
+    printf("Uncompressed size is: %lu bytes\n", infstream.total_out);
     printf("\n----------\n\n");
 
     // make sure uncompressed is exactly equal to original
+    assert(strcmp(buf, decompress_text)==0);
 
     return 0;
 }
