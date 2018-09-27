@@ -214,7 +214,9 @@ int main(int argc, char *argv[]){
         // compressing process 
         BIN_FILE *test = lz77_compress(argv[1], "lz.z77", 10000000, i);
         // print out result
-        printf("Compressed size(%i): %u. Compressed Ratio: %f %%\n", i, test->filelen, test->filelen/(double)bin->filelen);
+        printf("Compressed size(%i): %u. Compressed Ratio: %lf %%\n", i, test->filelen, 
+            bin->filelen > test->filelen ? (bin->filelen - test->filelen)*100/(float)bin->filelen : 
+                ((double)bin->filelen - test->filelen)*100/(float)bin->filelen );
 
         FILE *o = fopen("lz.z77", "wb");
         fwrite(test->byte, test->filelen, 1, o);
